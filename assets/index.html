@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página com SSL e GET</title>
+  <script>
+    // Função para realizar a requisição GET para o endpoint /api/dados
+    async function sendGetRequest() {
+      // Define os parâmetros a serem enviados:
+      // Parâmetros obrigatórios:
+      const olt = encodeURIComponent("OLT_EXEMPLO"); // String
+      const slot = encodeURIComponent("1");          // Inteiro representado como string
+      const pon = encodeURIComponent("2");           // Inteiro representado como string
+      // Parâmetro opcional:
+      const debug = encodeURIComponent("1");         // Inteiro (opcional)
+      
+      // Monta a URL com os parâmetros via query string
+      const requestUrl = `/api/dados?OLT=${olt}&SLOT=${slot}&PON=${pon}&debug=${debug}`;
+
+      try {
+        const response = await fetch(requestUrl);
+        if (!response.ok) {
+          throw new Error("Erro na requisição: " + response.status);
+        }
+        // Converte a resposta em JSON
+        const jsonData = await response.json();
+        // Exibe o resultado no elemento com id "result"
+        document.getElementById("result").innerText = JSON.stringify(jsonData, null, 2);
+      } catch (error) {
+        document.getElementById("result").innerText = "Erro: " + error;
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Página Servida com SSL</h1>
+  <p>Clique no botão para enviar uma requisição GET com os parâmetros:</p>
+  <button onclick="sendGetRequest()">Enviar GET</button>
+  <pre id="result" style="background: #f0f0f0; padding: 10px; margin-top: 20px;"></pre>
+</body>
+</html>
